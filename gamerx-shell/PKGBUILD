@@ -95,10 +95,15 @@ package() {
 
   # Quickshell modules
   install -dm755 "${pkgdir}/usr/share/gamerx-shell/quickshell"
-  install -dm755 "${pkgdir}/usr/share/gamerx-shell/quickshell/modules"
-  install -m644  "${src}/quickshell/shell.qml"   "${pkgdir}/usr/share/gamerx-shell/quickshell/shell.qml"
-  install -m644  "${src}/quickshell/qmldir"      "${pkgdir}/usr/share/gamerx-shell/quickshell/qmldir"
-  install -m644  "${src}/quickshell/modules/"*.qml "${pkgdir}/usr/share/gamerx-shell/quickshell/modules/"
+  install -m644  "${src}/quickshell/shell.qml" "${pkgdir}/usr/share/gamerx-shell/quickshell/shell.qml"
+  install -m644  "${src}/quickshell/qmldir"    "${pkgdir}/usr/share/gamerx-shell/quickshell/qmldir"
+  for sub in components services modules/bar modules/launcher modules/powermenu \
+             modules/controlcenter modules/osd modules/notifications; do
+    install -dm755 "${pkgdir}/usr/share/gamerx-shell/quickshell/${sub}"
+    if compgen -G "${src}/quickshell/${sub}/*" >/dev/null; then
+      install -m644 "${src}/quickshell/${sub}/"* "${pkgdir}/usr/share/gamerx-shell/quickshell/${sub}/" 2>/dev/null || true
+    fi
+  done
 
   # Theme renderers — installed where gamerx-theme expects them
   install -dm755 "${pkgdir}/usr/share/gamerx-theme/renderers"
