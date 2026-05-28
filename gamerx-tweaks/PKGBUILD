@@ -1,0 +1,47 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-tweaks
+pkgver=20260528
+pkgrel=1
+pkgdesc='Performance and quality-of-life tunings for GamerX OS (sysctl, zram, ananicy, journal, makepkg)'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-packages'
+license=('GPL-3.0-or-later')
+depends=()
+optdepends=(
+  'zram-generator: enables /etc/systemd/zram-generator.conf.d drop-in'
+  'ananicy-cpp: enables /etc/ananicy.d drop-in for game prioritization'
+  'cachyos-ananicy-rules: ruleset consumed by ananicy-cpp'
+  'earlyoom: respects defaults shipped here'
+)
+source=(
+  '99-gamerx.conf'
+  'gamerx-zram.conf'
+  'gamerx-journald.conf'
+  'gamerx-makepkg.conf'
+  '50-gamerx.conf'
+)
+sha256sums=(
+  'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
+)
+
+package() {
+  # sysctl drop-in
+  install -Dm644 "${srcdir}/99-gamerx.conf" \
+    "${pkgdir}/usr/lib/sysctl.d/99-gamerx.conf"
+
+  # zram-generator drop-in (only takes effect if zram-generator is installed)
+  install -Dm644 "${srcdir}/gamerx-zram.conf" \
+    "${pkgdir}/usr/lib/systemd/zram-generator.conf.d/gamerx-zram.conf"
+
+  # journald: keep logs sane
+  install -Dm644 "${srcdir}/gamerx-journald.conf" \
+    "${pkgdir}/usr/lib/systemd/journald.conf.d/gamerx-journald.conf"
+
+  # makepkg: parallel compression
+  install -Dm644 "${srcdir}/gamerx-makepkg.conf" \
+    "${pkgdir}/etc/makepkg.conf.d/gamerx.conf"
+
+  # earlyoom defaults override
+  install -Dm644 "${srcdir}/50-gamerx.conf" \
+    "${pkgdir}/usr/lib/earlyoom/defaults.d/50-gamerx.conf" || true
+}

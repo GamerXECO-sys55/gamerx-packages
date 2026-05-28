@@ -1,0 +1,17 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-mirrorlist
+pkgver=20260528
+pkgrel=1
+pkgdesc='Pacman mirrorlist for the GamerX OS repositories'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-packages'
+license=('GPL-3.0-or-later')
+backup=('etc/pacman.d/gamerx-mirrorlist')
+source=('gamerx-mirrorlist')
+sha256sums=('SKIP')
+
+package() {
+  install -dm755 "${pkgdir}/etc/pacman.d"
+  install -m644 "${srcdir}/gamerx-mirrorlist" \
+    "${pkgdir}/etc/pacman.d/gamerx-mirrorlist"
+}

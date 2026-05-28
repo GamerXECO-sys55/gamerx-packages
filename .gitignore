@@ -1,0 +1,18 @@
+# Build outputs and makepkg sandboxes — never committed.
+*/pkg/
+*/src/
+*/*.pkg.tar.zst
+*/*.pkg.tar.zst.sig
+
+# VCS source clones from PKGBUILDs (e.g. gamerx-branding's git+https source)
+gamerx-branding/gamerx-branding/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor / OS
+.DS_Store
+*.swp
+*~

@@ -1,0 +1,57 @@
+.TH GAMERX-THEME 1 "2026-05-28" "GamerX OS" "GamerX OS Manual"
+.SH NAME
+gamerx-theme \- single source of truth for GamerX OS theming
+.SH SYNOPSIS
+.B gamerx-theme
+.RI { show | get | set | list | apply | reset }
+.RI [ args... ]
+.SH DESCRIPTION
+.B gamerx-theme
+is the only tool that should write GamerX OS theme state. The Welcome app and
+GamerX Settings call this CLI; users may call it directly. State lives in
+.B ~/.config/gamerx/state.toml
+and is applied by renderers shipped in
+.BR /usr/share/gamerx-theme/renderers/ .
+.SH SUBCOMMANDS
+.TP
+.B show
+Print all current state values.
+.TP
+.BI "get " key
+Print one value.
+.TP
+.BI "set " "key value"
+Change one value and re-apply. Use
+.B --no-apply
+to save only.
+.TP
+.BI "list " kind
+List available values for a kind:
+.BR palettes ,
+.BR densities ,
+.BR animations ,
+.BR launchers ,
+.BR bars ,
+.BR notifications .
+.TP
+.B apply
+Re-render every config from current state.
+.TP
+.B reset
+Reset to factory defaults.
+.SH KEYS
+palette, density, animation, launcher, bar, notification, icon_theme, wallpaper.
+.SH FILES
+.TP
+.B ~/.config/gamerx/state.toml
+User state file.
+.TP
+.B /usr/share/gamerx/palettes/
+System palettes from
+.BR gamerx-branding .
+.TP
+.B ~/.config/gamerx/palettes/
+User-imported palettes (override system).
+.SH SEE ALSO
+.BR matugen (1),
+.BR hyprctl (1)

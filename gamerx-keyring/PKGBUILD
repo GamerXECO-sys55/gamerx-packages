@@ -1,0 +1,31 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-keyring
+pkgver=20260528
+pkgrel=1
+pkgdesc='GamerX OS PGP keyring for the [gamerx-core] and [gamerx-testing] pacman repos'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-packages'
+license=('GPL-3.0-or-later')
+install="${pkgname}.install"
+source=(
+  'gamerx-os.gpg'
+  'gamerx-os.fpr'
+  'gamerx-trusted'
+  'gamerx-revoked'
+)
+sha256sums=(
+  'SKIP'
+  'SKIP'
+  'SKIP'
+  'SKIP'
+)
+
+package() {
+  install -dm755 "${pkgdir}/usr/share/pacman/keyrings"
+  install -m644 "${srcdir}/gamerx-os.gpg" \
+    "${pkgdir}/usr/share/pacman/keyrings/gamerx.gpg"
+  install -m644 "${srcdir}/gamerx-trusted" \
+    "${pkgdir}/usr/share/pacman/keyrings/gamerx-trusted"
+  install -m644 "${srcdir}/gamerx-revoked" \
+    "${pkgdir}/usr/share/pacman/keyrings/gamerx-revoked"
+}

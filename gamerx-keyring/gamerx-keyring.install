@@ -1,0 +1,25 @@
+post_install() {
+  if usr/bin/pacman-key --add usr/share/pacman/keyrings/gamerx.gpg >/dev/null 2>&1; then
+    while read -r key; do
+      [[ -z "$key" || "${key:0:1}" == "#" ]] && continue
+      usr/bin/pacman-key --lsign-key "$key" >/dev/null 2>&1
+    done < usr/share/pacman/keyrings/gamerx-trusted
+    echo ":: GamerX OS keyring installed and trusted."
+  else
+    echo "!! Failed to import GamerX OS keyring. Run as root:"
+    echo "     pacman-key --add /usr/share/pacman/keyrings/gamerx.gpg"
+    echo "     pacman-key --lsign-key 3C7C0F0EE2EC008D417FA2D64354EA4AAA4736D3"
+  fi
+}
+
+post_upgrade() {
+  post_install "$1"
+}
+
+pre_remove() {
+  cat <<EOF
+!! Warning: removing gamerx-keyring will make every package from
+   [gamerx-core] and [gamerx-testing] fail signature verification.
+   You should only do this if you also remove those repos from pacman.conf.
+EOF
+}

@@ -1,0 +1,34 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-theme
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Single source of truth CLI for GamerX OS theming'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-shell'
+license=('GPL-3.0-or-later')
+depends=(
+  'python'
+  'python-tomli-w'
+  'gamerx-branding'   # palettes live in /usr/share/gamerx/palettes
+)
+optdepends=(
+  'matugen: Material You palette generation from wallpaper'
+  'hyprland: hot-reload Hyprland config on theme change'
+  'waybar: hot-reload bar on theme change'
+)
+source=(
+  'gamerx-theme'
+  'gamerx-theme.fish'
+  'gamerx-theme.bash'
+  'gamerx-theme.zsh'
+  'gamerx-theme.1'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+package() {
+  install -Dm755 "${srcdir}/gamerx-theme"  "${pkgdir}/usr/bin/gamerx-theme"
+  install -Dm644 "${srcdir}/gamerx-theme.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/gamerx-theme.fish"
+  install -Dm644 "${srcdir}/gamerx-theme.bash" "${pkgdir}/usr/share/bash-completion/completions/gamerx-theme"
+  install -Dm644 "${srcdir}/gamerx-theme.zsh"  "${pkgdir}/usr/share/zsh/site-functions/_gamerx-theme"
+  install -Dm644 "${srcdir}/gamerx-theme.1"    "${pkgdir}/usr/share/man/man1/gamerx-theme.1"
+}

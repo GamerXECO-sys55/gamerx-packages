@@ -1,0 +1,23 @@
+################################################################################
+##                       GamerX OS — pacman mirrorlist                        ##
+##                                                                            ##
+##  Channels:                                                                 ##
+##    [gamerx-core]    - stable, default                                      ##
+##    [gamerx-testing] - nightly, opt-in                                      ##
+##                                                                            ##
+##  The repo's $repo and $arch placeholders are expanded by pacman.           ##
+##  Uncomment a single mirror line to enable. The first uncommented mirror    ##
+##  in this file is used; pacman falls back to the next on failure.           ##
+##                                                                            ##
+##  v1.0 hosting: GitHub Releases (free, no infra). Migrating to a CDN at     ##
+##  v1.1 if the project grows.                                                ##
+################################################################################
+
+## Primary — GitHub Releases (worldwide via Fastly)
+Server = https://github.com/GamerXECO-sys55/gamerx-repo/releases/download/$repo-$arch
+
+## Secondary — github.io static hosting (planned, not yet active)
+# Server = https://gamerxeco-sys55.github.io/gamerx-repo/$repo/$arch
+
+## Custom domain (planned for v1.1)
+# Server = https://repo.gamerxos.dev/$repo/$arch

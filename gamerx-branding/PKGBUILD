@@ -1,0 +1,63 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-branding
+pkgver=20260528
+pkgrel=1
+pkgdesc='GamerX OS branding — logos, palettes, /etc/os-release, /etc/issue, default wallpaper'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-branding'
+license=('CC-BY-NC-SA-4.0' 'GPL-3.0-or-later')
+backup=('etc/os-release' 'etc/lsb-release' 'etc/issue')
+depends=()
+makedepends=('git')
+conflicts=('arch-release-keyring')   # we ship our own /etc/os-release
+provides=('os-release-gamerx')
+
+# Sources are pulled from the gamerx-branding companion repo at build time.
+_branding_commit='HEAD'
+source=(
+  "git+https://github.com/GamerXECO-sys55/gamerx-branding.git#commit=${_branding_commit}"
+)
+sha256sums=('SKIP')
+
+# When _branding_commit is HEAD, we always pull latest. Pin to a real commit before tagging a release.
+
+package() {
+  local src="${srcdir}/gamerx-branding"
+
+  # /etc files
+  install -dm755 "${pkgdir}/etc"
+  install -m644 "${src}/os-release"  "${pkgdir}/etc/os-release"
+  install -m644 "${src}/lsb-release" "${pkgdir}/etc/lsb-release"
+  install -m644 "${src}/issue"       "${pkgdir}/etc/issue"
+
+  # /usr/share/gamerx — central asset directory
+  install -dm755 "${pkgdir}/usr/share/gamerx"
+
+  # logos
+  install -dm755 "${pkgdir}/usr/share/gamerx/logos"
+  install -m644 "${src}/logos/wordmark.svg"        "${pkgdir}/usr/share/gamerx/logos/"
+  install -m644 "${src}/logos/wordmark-light.svg"  "${pkgdir}/usr/share/gamerx/logos/"
+  install -m644 "${src}/logos/orb.svg"             "${pkgdir}/usr/share/gamerx/logos/"
+  install -m644 "${src}/logos/orb-mono.svg"        "${pkgdir}/usr/share/gamerx/logos/"
+  if [[ -d "${src}/logos/png" ]]; then
+    install -dm755 "${pkgdir}/usr/share/gamerx/logos/png"
+    install -m644 "${src}/logos/png/"*.png "${pkgdir}/usr/share/gamerx/logos/png/"
+  fi
+
+  # palettes
+  install -dm755 "${pkgdir}/usr/share/gamerx/palettes"
+  install -m644 "${src}/palettes/"*.toml "${pkgdir}/usr/share/gamerx/palettes/"
+  install -m644 "${src}/palettes/SCHEMA.md" "${pkgdir}/usr/share/gamerx/palettes/SCHEMA.md"
+  install -m644 "${src}/PALETTE.md"         "${pkgdir}/usr/share/gamerx/PALETTE.md"
+
+  # wallpapers (default set)
+  install -dm755 "${pkgdir}/usr/share/gamerx/wallpapers/default"
+  if compgen -G "${src}/wallpapers/default/*" > /dev/null; then
+    cp -r "${src}/wallpapers/default/." "${pkgdir}/usr/share/gamerx/wallpapers/default/"
+  fi
+
+  # OS distribution logo (used by some apps)
+  install -dm755 "${pkgdir}/usr/share/pixmaps"
+  install -m644 "${src}/logos/orb.svg" \
+    "${pkgdir}/usr/share/pixmaps/gamerx-os.svg"
+}

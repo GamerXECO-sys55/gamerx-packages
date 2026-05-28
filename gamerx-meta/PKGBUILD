@@ -1,0 +1,164 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+# Meta package for the vanilla GamerX OS edition.
+# Installing this and its deps reproduces the curated default install.
+
+pkgname=gamerx-meta
+pkgver=20260528
+pkgrel=1
+pkgdesc='GamerX OS — vanilla edition meta package (depends on the curated install set)'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-os'
+license=('GPL-3.0-or-later')
+groups=('gamerx')
+provides=('gamerx-os')
+
+depends=(
+  # core
+  'gamerx-keyring'
+  'gamerx-mirrorlist'
+  'gamerx-branding'
+  'gamerx-tweaks'
+
+  # base system
+  'base'
+  'base-devel'
+  'linux-zen'
+  'linux-zen-headers'
+  'linux-lts'
+  'linux-lts-headers'
+  'linux-firmware'
+  'intel-ucode'
+  'amd-ucode'
+
+  # boot
+  'grub'
+  'efibootmgr'
+  'os-prober'
+  'mkinitcpio'
+  # plymouth and grub-btrfs land via gamerx-shell when ready
+
+  # filesystems
+  'btrfs-progs'
+  'dosfstools'
+  'exfatprogs'
+  'e2fsprogs'
+  'snapper'
+  'snap-pac'
+
+  # network
+  'networkmanager'
+  'iwd'
+  'openssh'
+  'wireguard-tools'
+  'ufw'
+
+  # audio + bluetooth
+  'pipewire'
+  'pipewire-pulse'
+  'pipewire-alsa'
+  'pipewire-jack'
+  'wireplumber'
+  'pavucontrol'
+  'pamixer'
+  'playerctl'
+  'bluez'
+  'bluez-utils'
+
+  # graphics base (driver detector adds vendor-specific bits at install time)
+  'mesa'
+  'vulkan-icd-loader'
+  'libva-utils'
+
+  # printing (lightweight)
+  'cups'
+  'cups-pdf'
+  'system-config-printer'
+
+  # power
+  'power-profiles-daemon'
+  'tlp'
+  'thermald'
+
+  # hyprland desktop
+  'hyprland'
+  'xdg-desktop-portal-hyprland'
+  'xdg-desktop-portal-gtk'
+  'qt5-wayland'
+  'qt6-wayland'
+  'polkit-kde-agent'
+  'quickshell'
+  'waybar'
+  'walker'
+  'swaync'
+  'swww'
+  'hyprlock'
+  'hypridle'
+
+  # screenshots, clipboard, color
+  'grim'
+  'slurp'
+  'swappy'
+  'wf-recorder'
+  'wl-clipboard'
+  'cliphist'
+  'brightnessctl'
+  'matugen'
+
+  # apps that always make sense
+  'nautilus'
+  'gnome-text-editor'
+
+  # CLI essentials
+  'fish'
+  'zsh'
+  'starship'
+  'git'
+  'curl'
+  'wget'
+  'unzip'
+  'zip'
+  'p7zip'
+  'tar'
+  'rsync'
+  'nano'
+  'vim'
+
+  # modern unix toolbelt
+  'eza'
+  'bat'
+  'ripgrep'
+  'fd'
+  'fzf'
+  'zoxide'
+  'lazygit'
+  'tealdeer'
+  'btop'
+  'fastfetch'
+
+  # fonts
+  'noto-fonts'
+  'noto-fonts-emoji'
+  'noto-fonts-cjk'
+  'ttf-jetbrains-mono-nerd'
+  'ttf-firacode-nerd'
+  'ttf-cascadia-code-nerd'
+  'ttf-nerd-fonts-symbols'
+
+  # icons + cursors
+  'papirus-icon-theme'
+  'bibata-cursor-theme'
+
+  # performance defaults shipped via gamerx-tweaks
+  'zram-generator'
+  'ananicy-cpp'
+  'earlyoom'
+  'gamemode'
+  'lib32-gamemode'
+  'mangohud'
+  'lib32-mangohud'
+)
+
+package() {
+  install -Dm644 /dev/null "${pkgdir}/usr/share/gamerx/meta/edition.txt"
+  printf "%s\n" "vanilla" > "${pkgdir}/usr/share/gamerx/meta/edition.txt"
+}

@@ -1,0 +1,23 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+# Meta package for the GamerX OS Aria edition.
+# This is gamerx-meta + the Aria agent overlay.
+
+pkgname=gamerx-meta-aria
+pkgver=20260528
+pkgrel=1
+pkgdesc='GamerX OS — Aria edition meta package (vanilla + Aria agent overlay)'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-os'
+license=('GPL-3.0-or-later')
+groups=('gamerx-aria')
+provides=('gamerx-os-aria')
+depends=(
+  'gamerx-meta'
+  # gamerx-aria is shipped from a separate repo connected to Aria-V11.
+  # It will be added once the Aria edition ISO is built (P10).
+)
+
+package() {
+  install -Dm644 /dev/null "${pkgdir}/usr/share/gamerx/meta/edition.txt"
+  printf "%s\n" "aria" > "${pkgdir}/usr/share/gamerx/meta/edition.txt"
+}
