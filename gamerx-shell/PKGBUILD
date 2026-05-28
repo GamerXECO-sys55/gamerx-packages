@@ -108,4 +108,7 @@ package() {
   # Theme renderers — installed where gamerx-theme expects them
   install -dm755 "${pkgdir}/usr/share/gamerx-theme/renderers"
   install -m755  "${src}/renderers/"*.sh "${pkgdir}/usr/share/gamerx-theme/renderers/"
+
+  # Session orchestrator
+  install -Dm755 "${src}/bin/gamerx-shell-start" "${pkgdir}/usr/bin/gamerx-shell-start"
 }
