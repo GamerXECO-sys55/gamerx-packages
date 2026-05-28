@@ -88,7 +88,7 @@ depends=(
   'polkit-kde-agent'
   'quickshell'
   'waybar'
-  'walker'
+  'rofi-wayland'
   'swaync'
   'swww'
   'hyprlock'

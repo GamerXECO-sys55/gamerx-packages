@@ -17,7 +17,7 @@ depends=(
   'hyprland'
   'quickshell'
   'waybar'
-  'walker'
+  'rofi-wayland'
   'swaync'
   'hyprlock'
   'hypridle'
@@ -70,14 +70,13 @@ package() {
     install -m644 "${d}/style.css"    "${pkgdir}/usr/share/gamerx-shell/waybar/styles/${name}/"
   done
 
-  # Walker styles
-  install -dm755 "${pkgdir}/usr/share/gamerx-shell/walker/styles"
-  for d in "${src}/walker/styles/"*/; do
+  # Walker styles  -> Rofi styles
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/rofi/styles"
+  for d in "${src}/rofi/styles/"*/; do
     [[ -d "$d" ]] || continue
     name=$(basename "$d")
-    install -dm755 "${pkgdir}/usr/share/gamerx-shell/walker/styles/${name}"
-    install -m644 "${d}/config.toml" "${pkgdir}/usr/share/gamerx-shell/walker/styles/${name}/"
-    install -m644 "${d}/style.css"   "${pkgdir}/usr/share/gamerx-shell/walker/styles/${name}/"
+    install -dm755 "${pkgdir}/usr/share/gamerx-shell/rofi/styles/${name}"
+    install -m644 "${d}/config.rasi" "${pkgdir}/usr/share/gamerx-shell/rofi/styles/${name}/"
   done
 
   # swaync styles
