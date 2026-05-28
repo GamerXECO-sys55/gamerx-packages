@@ -1,0 +1,5 @@
+pkg/
+src/
+gamerx-shell/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig

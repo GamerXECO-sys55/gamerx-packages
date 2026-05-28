@@ -1,0 +1,107 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+#
+# Build modes:
+#   1. Default (CI / users):        clones the gamerx-shell repo at $_shell_commit.
+#   2. Local dev (GAMERX_LOCAL_SRC): copies $GAMERX_LOCAL_SRC instead of cloning.
+#      example: GAMERX_LOCAL_SRC=/home/gamerx/GamerX-OS/repos/gamerx-shell makepkg -fs
+#
+pkgname=gamerx-shell
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Hyprland desktop shell for GamerX OS — Quickshell modules, Waybar/walker/swaync/hyprlock styles, theme renderers'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-shell'
+license=('GPL-3.0-or-later')
+depends=(
+  'bash'
+  'hyprland'
+  'quickshell'
+  'waybar'
+  'walker'
+  'swaync'
+  'hyprlock'
+  'hypridle'
+  'swww'
+  'gamerx-theme'
+  'gamerx-branding'
+  'matugen'
+)
+optdepends=(
+  'mpvpaper: video wallpapers (loaded only when active wallpaper is a video)'
+  'gamerx-meta-aria: Aria edition shell extensions'
+)
+makedepends=('git')
+
+_shell_commit='HEAD'
+
+if [[ -n "${GAMERX_LOCAL_SRC:-}" ]]; then
+  source=()
+  noextract=()
+else
+  source=("git+https://github.com/GamerXECO-sys55/gamerx-shell.git#commit=${_shell_commit}")
+  sha256sums=('SKIP')
+fi
+
+prepare() {
+  if [[ -n "${GAMERX_LOCAL_SRC:-}" ]]; then
+    rm -rf "${srcdir}/gamerx-shell"
+    cp -r "${GAMERX_LOCAL_SRC}" "${srcdir}/gamerx-shell"
+  fi
+}
+
+package() {
+  local src="${srcdir}/gamerx-shell"
+
+  # Hyprland modular configs
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/hyprland"
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/hyprland/density"
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/hyprland/animations"
+  install -m644  "${src}/hyprland/"*.conf "${pkgdir}/usr/share/gamerx-shell/hyprland/"
+  install -m644  "${src}/hyprland/density/"*.conf    "${pkgdir}/usr/share/gamerx-shell/hyprland/density/"
+  install -m644  "${src}/hyprland/animations/"*.conf "${pkgdir}/usr/share/gamerx-shell/hyprland/animations/"
+
+  # Waybar styles
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/waybar/styles"
+  for d in "${src}/waybar/styles/"*/; do
+    [[ -d "$d" ]] || continue
+    name=$(basename "$d")
+    install -dm755 "${pkgdir}/usr/share/gamerx-shell/waybar/styles/${name}"
+    install -m644 "${d}/config.jsonc" "${pkgdir}/usr/share/gamerx-shell/waybar/styles/${name}/"
+    install -m644 "${d}/style.css"    "${pkgdir}/usr/share/gamerx-shell/waybar/styles/${name}/"
+  done
+
+  # Walker styles
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/walker/styles"
+  for d in "${src}/walker/styles/"*/; do
+    [[ -d "$d" ]] || continue
+    name=$(basename "$d")
+    install -dm755 "${pkgdir}/usr/share/gamerx-shell/walker/styles/${name}"
+    install -m644 "${d}/config.toml" "${pkgdir}/usr/share/gamerx-shell/walker/styles/${name}/"
+    install -m644 "${d}/style.css"   "${pkgdir}/usr/share/gamerx-shell/walker/styles/${name}/"
+  done
+
+  # swaync styles
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/swaync/styles"
+  for d in "${src}/swaync/styles/"*/; do
+    [[ -d "$d" ]] || continue
+    name=$(basename "$d")
+    install -dm755 "${pkgdir}/usr/share/gamerx-shell/swaync/styles/${name}"
+    install -m644 "${d}/config.json" "${pkgdir}/usr/share/gamerx-shell/swaync/styles/${name}/"
+    install -m644 "${d}/style.css"   "${pkgdir}/usr/share/gamerx-shell/swaync/styles/${name}/"
+  done
+
+  # hyprlock template
+  install -Dm644 "${src}/hyprlock/hyprlock.conf" \
+    "${pkgdir}/usr/share/gamerx-shell/hyprlock/hyprlock.conf"
+
+  # Quickshell modules
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/quickshell"
+  install -dm755 "${pkgdir}/usr/share/gamerx-shell/quickshell/modules"
+  install -m644  "${src}/quickshell/shell.qml"   "${pkgdir}/usr/share/gamerx-shell/quickshell/shell.qml"
+  install -m644  "${src}/quickshell/qmldir"      "${pkgdir}/usr/share/gamerx-shell/quickshell/qmldir"
+  install -m644  "${src}/quickshell/modules/"*.qml "${pkgdir}/usr/share/gamerx-shell/quickshell/modules/"
+
+  # Theme renderers — installed where gamerx-theme expects them
+  install -dm755 "${pkgdir}/usr/share/gamerx-theme/renderers"
+  install -m755  "${src}/renderers/"*.sh "${pkgdir}/usr/share/gamerx-theme/renderers/"
+}
