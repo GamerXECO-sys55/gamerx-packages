@@ -1,0 +1,15 @@
+post_install() {
+  if usr/bin/plymouth-set-default-theme -R gamerx >/dev/null 2>&1; then
+    echo ":: Plymouth theme set to GamerX. Initramfs rebuilt."
+  else
+    cat <<EOF
+:: Plymouth theme installed. Activate manually:
+     sudo plymouth-set-default-theme -R gamerx
+EOF
+  fi
+}
+post_upgrade() { post_install "$1"; }
+post_remove() {
+  echo ":: Plymouth theme 'gamerx' removed. Set a new default:"
+  echo "     sudo plymouth-set-default-theme -R <theme>"
+}

@@ -1,0 +1,40 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-grub-theme
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='GRUB theme for GamerX OS — duotone aurora background, Inter wordmark, GamerX accent.'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-branding'
+license=('CC-BY-NC-SA-4.0' 'GPL-3.0-or-later')
+depends=('grub')
+makedepends=('git' 'librsvg' 'python-pillow')
+
+_branding_commit='HEAD'
+
+if [[ -n "${GAMERX_LOCAL_SRC:-}" ]]; then
+  source=()
+else
+  source=("git+https://github.com/GamerXECO-sys55/gamerx-branding.git#commit=${_branding_commit}")
+  sha256sums=('SKIP')
+fi
+
+prepare() {
+  if [[ -n "${GAMERX_LOCAL_SRC:-}" ]]; then
+    rm -rf "${srcdir}/gamerx-branding"
+    cp -r "${GAMERX_LOCAL_SRC}" "${srcdir}/gamerx-branding"
+  fi
+  cd "${srcdir}/gamerx-branding/themes/gamerx-grub-theme"
+  bash build.sh
+}
+
+package() {
+  local src="${srcdir}/gamerx-branding/themes/gamerx-grub-theme"
+  local dst="${pkgdir}/usr/share/grub/themes/gamerx"
+
+  install -dm755 "$dst"
+  install -m644 "$src/theme.txt"        "$dst/theme.txt"
+  install -m644 "$src/background.png"   "$dst/background.png"
+  install -m644 "$src"/item_*.png            "$dst/"
+  install -m644 "$src"/selected_item_*.png   "$dst/"
+  install -m644 "$src"/terminal_box_*.png    "$dst/"
+}

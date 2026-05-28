@@ -1,0 +1,5 @@
+pkg/
+src/
+gamerx-branding/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig

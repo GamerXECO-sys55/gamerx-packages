@@ -1,0 +1,45 @@
+# Maintainer: GamerX <gamerx-os@gamerxeco-sys55.users.noreply.github.com>
+pkgname=gamerx-plymouth-theme
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Plymouth theme for GamerX OS — pulsing duotone orb on aurora gradient.'
+arch=('any')
+url='https://github.com/GamerXECO-sys55/gamerx-branding'
+license=('CC-BY-NC-SA-4.0' 'GPL-3.0-or-later')
+depends=('plymouth')
+makedepends=('git' 'librsvg' 'python-pillow')
+install="${pkgname}.install"
+
+_branding_commit='HEAD'
+
+if [[ -n "${GAMERX_LOCAL_SRC:-}" ]]; then
+  source=("${pkgname}.install")
+  sha256sums=('SKIP')
+else
+  source=(
+    "git+https://github.com/GamerXECO-sys55/gamerx-branding.git#commit=${_branding_commit}"
+    "${pkgname}.install"
+  )
+  sha256sums=('SKIP' 'SKIP')
+fi
+
+prepare() {
+  if [[ -n "${GAMERX_LOCAL_SRC:-}" ]]; then
+    rm -rf "${srcdir}/gamerx-branding"
+    cp -r "${GAMERX_LOCAL_SRC}" "${srcdir}/gamerx-branding"
+  fi
+  cd "${srcdir}/gamerx-branding/themes/gamerx-plymouth-theme"
+  bash build.sh
+}
+
+package() {
+  local src="${srcdir}/gamerx-branding/themes/gamerx-plymouth-theme"
+  local dst="${pkgdir}/usr/share/plymouth/themes/gamerx"
+  install -dm755 "$dst"
+  install -m644 "$src/gamerx.plymouth" "$dst/"
+  install -m644 "$src/gamerx.script"   "$dst/"
+  install -m644 "$src/background.png"  "$dst/"
+  install -m644 "$src/orb.png"         "$dst/"
+  install -m644 "$src/wordmark.png"    "$dst/"
+  install -m644 "$src/box.png"         "$dst/"
+}
