@@ -6,10 +6,10 @@ pkgdesc='GamerX OS branding — logos, palettes, /etc/os-release, /etc/issue, de
 arch=('any')
 url='https://github.com/GamerXECO-sys55/gamerx-branding'
 license=('CC-BY-NC-SA-4.0' 'GPL-3.0-or-later')
-backup=('etc/os-release' 'etc/lsb-release' 'etc/issue')
+install="${pkgname}.install"
+backup=()
 depends=()
 makedepends=('git')
-conflicts=('arch-release-keyring')   # we ship our own /etc/os-release
 provides=('os-release-gamerx')
 
 # Sources are pulled from the gamerx-branding companion repo at build time.
@@ -24,11 +24,13 @@ sha256sums=('SKIP')
 package() {
   local src="${srcdir}/gamerx-branding"
 
-  # /etc files
-  install -dm755 "${pkgdir}/etc"
-  install -m644 "${src}/os-release"  "${pkgdir}/etc/os-release"
-  install -m644 "${src}/lsb-release" "${pkgdir}/etc/lsb-release"
-  install -m644 "${src}/issue"       "${pkgdir}/etc/issue"
+  # Brand identity files staged under our namespace so we never collide with
+  # 'filesystem'. The post_install scriptlet copies them over /usr/lib/os-release,
+  # /usr/lib/lsb-release, /etc/issue at install time.
+  install -dm755 "${pkgdir}/usr/share/gamerx/branding"
+  install -m644 "${src}/os-release"  "${pkgdir}/usr/share/gamerx/branding/os-release"
+  install -m644 "${src}/lsb-release" "${pkgdir}/usr/share/gamerx/branding/lsb-release"
+  install -m644 "${src}/issue"       "${pkgdir}/usr/share/gamerx/branding/issue"
 
   # /usr/share/gamerx — central asset directory
   install -dm755 "${pkgdir}/usr/share/gamerx"

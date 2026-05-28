@@ -1,0 +1,17 @@
+_apply_branding() {
+  install -m644 usr/share/gamerx/branding/os-release  usr/lib/os-release  2>/dev/null || true
+  install -m644 usr/share/gamerx/branding/lsb-release usr/lib/lsb-release 2>/dev/null || true
+  install -m644 usr/share/gamerx/branding/issue       etc/issue           2>/dev/null || true
+  echo ":: GamerX OS branding applied to /usr/lib/os-release, /usr/lib/lsb-release, /etc/issue."
+  echo "   Originals are still owned by 'filesystem'; on update, this scriptlet re-applies."
+}
+
+post_install() { _apply_branding "$1"; }
+post_upgrade() { _apply_branding "$1"; }
+pre_remove() {
+  cat <<EOF
+:: GamerX branding will be removed on next system update or by reinstalling
+   the 'filesystem' package:
+     pacman -S --overwrite '*' filesystem
+EOF
+}
